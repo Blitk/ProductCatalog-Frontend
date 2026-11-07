@@ -1,6 +1,7 @@
 
 import { productService } from "./services/productService.js";
 import { categoryService } from "./services/categoryService.js";
+import { initializeProductModal } from "./components/productModal.js";
 import { API_SERVER_URL } from "../../shared/js/config.js";
 
 const PAGE_SIZE = 10;
@@ -25,6 +26,8 @@ const state = {
     totalElements: 0,
     requestId: 0
 };
+
+let productModal;
 
 function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, character => {
@@ -124,7 +127,9 @@ function renderProducts(products) {
                 <td>${formatPrice(product.price)}</td>
 
                 <td>
-                    <span class="stock-label ${stock > 0 ? "stock-positive" : "stock-negative"}">
+                    <span class="stock-label ${
+                        stock > 0 ? "stock-positive" : "stock-negative"
+                    }">
                         ${stock}
                     </span>
                 </td>
@@ -133,9 +138,19 @@ function renderProducts(products) {
                     <div class="product-actions">
                         <button
                             type="button"
+                            class="action-button"
+                            data-action="edit"
+                            data-id="${escapeHTML(product.id)}"
+                            aria-label="Editar ${escapeHTML(product.name)}"
+                            title="Editar produto">
+                            Editar
+                        </button>
+
+                        <button
+                            type="button"
                             class="action-button delete-action"
                             data-action="delete"
-                            data-id="${product.id}"
+                            data-id="${escapeHTML(product.id)}"
                             aria-label="Excluir ${escapeHTML(product.name)}"
                             title="Excluir produto">
                             Excluir
@@ -212,7 +227,6 @@ async function loadProducts() {
     try {
         const response = await productService.filterProducts(params);
 
-        // Ignora respostas de requisições anteriores.
         if (currentRequestId !== state.requestId) {
             return;
         }
@@ -221,7 +235,10 @@ async function loadProducts() {
             ? response
             : response.content || [];
 
-        state.totalPages = response.totalPages ?? 1;
+        state.totalPages = response.totalPages ?? (
+            products.length > 0 ? 1 : 0
+        );
+
         state.totalElements = response.totalElements ?? products.length;
 
         renderProducts(products);
@@ -247,7 +264,10 @@ async function loadProducts() {
         `;
 
         elements.count.textContent = "Erro ao carregar";
-        showError("Verifique se o backend está funcionando e tente novamente.");
+
+        showError(
+            "Verifique se o backend está funcionando e tente novamente."
+        );
     }
 }
 
@@ -258,6 +278,10 @@ async function loadCategories() {
         const categories = Array.isArray(response)
             ? response
             : response.content || [];
+
+        elements.categoryFilter.innerHTML = `
+            <option value="">Todas as categorias</option>
+        `;
 
         categories.forEach(category => {
             const option = document.createElement("option");
@@ -285,8 +309,11 @@ async function deleteProduct(id) {
     try {
         await productService.deleteProduct(id);
 
-        // Se a página atual ficou vazia, volta uma página.
-        if (state.page > 0 && state.totalElements % PAGE_SIZE === 1) {
+        // Se a página atual ficar vazia, volta uma página.
+        if (
+            state.page > 0 &&
+            state.totalElements - 1 <= state.page * PAGE_SIZE
+        ) {
             state.page--;
         }
 
@@ -327,21 +354,33 @@ function initializeEvents() {
     elements.retryButton.addEventListener("click", loadProducts);
 
     elements.addButton.addEventListener("click", () => {
-        alert("O formulário de cadastro será implementado na próxima etapa.");
+        productModal.openCreate();
     });
 
     elements.tableBody.addEventListener("click", event => {
-        const button = event.target.closest("[data-action='delete']");
+        const button = event.target.closest("[data-action]");
 
         if (!button) {
             return;
         }
 
-        deleteProduct(button.dataset.id);
+        const { action, id } = button.dataset;
+
+        if (action === "edit") {
+            productModal.openEdit(id);
+        }
+
+        if (action === "delete") {
+            deleteProduct(id);
+        }
     });
 }
 
 export async function initializeProducts() {
+    productModal = initializeProductModal({
+        onSaved: loadProducts
+    });
+
     initializeEvents();
 
     await loadCategories();
