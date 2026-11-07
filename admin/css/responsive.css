@@ -1,0 +1,78 @@
+
+@media (max-width: 900px) {
+
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    .page-content {
+        padding: 25px;
+    }
+
+    .topbar {
+        padding: 0 25px;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-container {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .topbar {
+        height: 72px;
+        padding: 0 18px;
+    }
+
+    .topbar-label {
+        display: none;
+    }
+
+    .topbar h1 {
+        font-size: 16px;
+    }
+
+    .user-information {
+        display: none;
+    }
+
+    .page-content {
+        padding: 25px 18px;
+    }
+
+    .admin-footer {
+        padding: 18px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+    .page-heading h2 {
+        font-size: 18px;
+    }
+
+    .admin-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+
+}
