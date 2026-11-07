@@ -217,9 +217,121 @@
     </button>
 </div>
 
+                    
 
                 </section>
 
+<!-- PRODUCTS PAGE -->
+<section class="admin-page" id="products-page" hidden>
+
+    <div class="page-heading">
+        <div>
+            <h2>Produtos</h2>
+            <p>Gerencie os produtos cadastrados no catálogo.</p>
+        </div>
+
+        <button type="button" class="primary-button" id="add-product-button">
+            + Novo produto
+        </button>
+    </div>
+
+    <div class="product-toolbar">
+
+        <div class="product-search">
+            <input
+                type="search"
+                id="product-search"
+                placeholder="Pesquisar produto pelo nome..."
+                aria-label="Pesquisar produto"
+            >
+
+            <button type="button" class="secondary-button" id="search-product-button">
+                Buscar
+            </button>
+        </div>
+
+        <div class="product-filters">
+
+            <select id="product-category-filter" aria-label="Filtrar por categoria">
+                <option value="">Todas as categorias</option>
+            </select>
+
+            <select id="product-sort" aria-label="Ordenar produtos">
+                <option value="id,desc">Mais recentes</option>
+                <option value="name,asc">Nome: A–Z</option>
+                <option value="price,asc">Menor preço</option>
+                <option value="price,desc">Maior preço</option>
+            </select>
+
+        </div>
+
+    </div>
+
+    <div class="product-table-container">
+
+        <table class="product-admin-table">
+
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Estoque</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody id="products-table-body">
+                <tr>
+                    <td colspan="5" class="table-message">
+                        Carregando produtos...
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="product-list-footer">
+
+        <span id="products-count">Carregando...</span>
+
+        <nav id="products-pagination" class="admin-pagination"
+            aria-label="Paginação de produtos">
+        </nav>
+
+    </div>
+
+    <div id="products-error" class="dashboard-error" role="alert" hidden>
+        <span id="products-error-message"></span>
+
+        <button type="button" class="secondary-button" id="products-retry">
+            Tentar novamente
+        </button>
+    </div>
+
+</section>
+
+
+<!-- CATEGORIES PAGE - IMPLEMENTAREMOS DEPOIS -->
+<section class="admin-page" id="categories-page" hidden>
+
+    <div class="page-heading">
+        <div>
+            <h2>Categorias</h2>
+            <p>Gerencie as categorias do catálogo.</p>
+        </div>
+    </div>
+
+    <div class="dashboard-placeholder">
+        <div class="placeholder-icon">▤</div>
+        <h3>Gerenciamento de categorias</h3>
+        <p>Esta área será implementada na próxima etapa.</p>
+    </div>
+
+</section>
+                
             </main>
 
             <!-- FOOTER -->
