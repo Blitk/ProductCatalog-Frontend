@@ -137,3 +137,7 @@ button {
 .site-footer p {
     margin-top: 4px;
 }
+
+[hidden] {
+    display: none !important;
+}
