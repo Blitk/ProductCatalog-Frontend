@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Confira os detalhes deste produto no catálogo ProductCatalog.">
+
+    <title>Produto | ProductCatalog</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="stylesheet" href="./css/product.css">
+
+    <script type="module" src="./js/product.js"></script>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-container">
+
+            <a href="./index.html" class="brand">
+                <span class="brand-icon">P</span>
+                <span>ProductCatalog</span>
+            </a>
+
+            <nav class="header-navigation">
+                <a href="./index.html">Início</a>
+                <a href="./index.html#catalog">Catálogo</a>
+            </nav>
+
+            <a href="../" class="header-link">
+                Página inicial
+            </a>
+
+        </div>
+    </header>
+
+    <main class="product-page">
+
+        <div class="product-breadcrumb">
+            <a href="./index.html">Catálogo</a>
+            <span>/</span>
+            <span id="breadcrumb-product">Produto</span>
+        </div>
+
+        <div id="product-message" class="catalog-message">
+            Carregando produto...
+        </div>
+
+        <section id="product-details" class="product-detail" hidden>
+
+            <div class="product-gallery">
+                <img
+                    id="product-image"
+                    src=""
+                    alt=""
+                    class="product-detail-image"
+                >
+            </div>
+
+            <div class="product-information">
+
+                <span id="product-category" class="product-category"></span>
+
+                <h1 id="product-name"></h1>
+
+                <div class="detail-price" id="product-price"></div>
+
+                <div class="detail-divider"></div>
+
+                <h2>Descrição</h2>
+
+                <p id="product-description"></p>
+
+                <div class="detail-stock">
+                    <span class="stock-indicator" id="stock-indicator"></span>
+                    <span id="product-stock"></span>
+                </div>
+
+                <div class="detail-divider"></div>
+
+                <div class="product-metadata">
+                    <span>Código do produto</span>
+                    <strong id="product-id"></strong>
+                </div>
+
+                <a href="./index.html#catalog" class="back-button">
+                    ← Voltar ao catálogo
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div>
+            <strong>ProductCatalog</strong>
+            <p>Catálogo de produtos.</p>
+        </div>
+
+        <span>Desenvolvido com HTML, CSS e JavaScript.</span>
+    </footer>
+
+</body>
+</html>
