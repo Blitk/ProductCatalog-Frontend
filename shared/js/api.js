@@ -1,5 +1,4 @@
 
-
 import { API_BASE_URL } from "./config.js";
 
 export class ApiError extends Error {
@@ -37,6 +36,7 @@ async function request(endpoint, options = {}) {
 }
 
 export const api = {
+
     get(endpoint) {
         return request(endpoint);
     },
@@ -48,6 +48,13 @@ export const api = {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(body)
+        });
+    },
+
+    postMultipart(endpoint, formData) {
+        return request(endpoint, {
+            method: "POST",
+            body: formData
         });
     },
 
@@ -66,4 +73,5 @@ export const api = {
             method: "DELETE"
         });
     }
+
 };
