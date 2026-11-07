@@ -99,9 +99,17 @@
 
             </div>
 
-            <div id="catalog-message" class="catalog-message" role="status">
-                Carregando produtos...
+            <div id="catalog-message" class="catalog-message" hidden>
+                <div class="message-icon" id="message-icon">📦</div>
+                <h3 id="message-title">Nenhum produto encontrado</h3>
+                <p id="message-description">
+                Não encontramos produtos para exibir.
+                </p>
+                <button id="retry-button" class="btn-primary" hidden>
+                Tentar novamente
+                </button>
             </div>
+    
 
             <div class="product-grid" id="product-grid"></div>
 
