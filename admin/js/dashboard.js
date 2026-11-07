@@ -66,7 +66,7 @@ function escapeHTML(value) {
 
 function getImageUrl(imageUrl) {
     if (!imageUrl) {
-        return "../../assets/images/no-image.png";
+        return "../assets/images/no-image.png";
     }
 
     if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
@@ -120,7 +120,7 @@ function renderRecentProducts(products) {
 
     elements.recentProducts.querySelectorAll("img").forEach(image => {
         image.addEventListener("error", () => {
-            image.src = "../../assets/images/no-image.png";
+            image.src = "../assets/images/no-image.png";
         }, { once: true });
     });
 }
