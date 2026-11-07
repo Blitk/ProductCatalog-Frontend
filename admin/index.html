@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description" content="Painel administrativo do ProductCatalog.">
-
     <meta name="theme-color" content="#0f172a">
 
     <title>Administração | ProductCatalog</title>
@@ -28,7 +27,7 @@
             <div class="sidebar-header">
 
                 <a href="../index.html" class="admin-logo">
-                    <span class="logo-icon">P</span>
+                    <span class="logo-icon" aria-hidden="true">P</span>
                     <span>ProductCatalog</span>
                 </a>
 
@@ -36,22 +35,22 @@
 
             </div>
 
-            <nav class="sidebar-navigation">
+            <nav class="sidebar-navigation" aria-label="Navegação administrativa">
 
                 <span class="nav-section-title">GERENCIAMENTO</span>
 
                 <a href="#dashboard" class="nav-link active" data-page="dashboard">
-                    <span class="nav-icon">▦</span>
+                    <span class="nav-icon" aria-hidden="true">▦</span>
                     Dashboard
                 </a>
 
                 <a href="#products" class="nav-link" data-page="products">
-                    <span class="nav-icon">□</span>
+                    <span class="nav-icon" aria-hidden="true">□</span>
                     Produtos
                 </a>
 
                 <a href="#categories" class="nav-link" data-page="categories">
-                    <span class="nav-icon">▤</span>
+                    <span class="nav-icon" aria-hidden="true">▤</span>
                     Categorias
                 </a>
 
@@ -59,13 +58,18 @@
 
             <div class="sidebar-footer">
 
-                <a href="../store/index.html" target="_blank" class="sidebar-store-link">
-                    <span class="nav-icon">↗</span>
+                <a
+                    href="../store/index.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="sidebar-store-link"
+                >
+                    <span class="nav-icon" aria-hidden="true">↗</span>
                     Visualizar catálogo
                 </a>
 
                 <a href="../index.html" class="sidebar-store-link">
-                    <span class="nav-icon">←</span>
+                    <span class="nav-icon" aria-hidden="true">←</span>
                     Voltar ao início
                 </a>
 
@@ -77,7 +81,7 @@
 
         </aside>
 
-        <!-- MAIN CONTENT -->
+        <!-- MAIN CONTAINER -->
         <div class="main-container">
 
             <!-- TOPBAR -->
@@ -89,7 +93,9 @@
                         type="button"
                         class="menu-toggle"
                         id="menu-toggle"
-                        aria-label="Abrir menu">
+                        aria-label="Abrir menu"
+                        aria-controls="sidebar"
+                    >
                         ☰
                     </button>
 
@@ -103,12 +109,14 @@
                 <div class="topbar-right">
 
                     <div class="admin-user">
-                        <div class="user-avatar">A</div>
+
+                        <div class="user-avatar" aria-hidden="true">A</div>
 
                         <div class="user-information">
                             <strong>Administrador</strong>
                             <span>Gestão do catálogo</span>
                         </div>
+
                     </div>
 
                 </div>
@@ -118,6 +126,7 @@
             <!-- PAGE CONTENT -->
             <main class="page-content" id="page-content">
 
+                <!-- DASHBOARD PAGE -->
                 <section class="dashboard-page" id="dashboard-page">
 
                     <div class="page-heading">
@@ -129,351 +138,516 @@
 
                     </div>
 
-                    <!-- DASHBOARD CONTENT WILL BE IMPLEMENTED NEXT -->
+                    <!-- DASHBOARD STATISTICS -->
+                    <div class="dashboard-stats" id="dashboard-stats">
 
-                    
-<div class="dashboard-stats" id="dashboard-stats">
+                        <article class="stat-card">
 
-    <article class="stat-card">
-        <div class="stat-card-top">
-            <span>Total de produtos</span>
-            <span class="stat-icon blue">▦</span>
-        </div>
-        <strong class="stat-value" id="total-products">—</strong>
-        <span class="stat-description">Produtos cadastrados</span>
-    </article>
+                            <div class="stat-card-top">
+                                <span>Total de produtos</span>
+                                <span class="stat-icon blue" aria-hidden="true">▦</span>
+                            </div>
 
-    <article class="stat-card">
-        <div class="stat-card-top">
-            <span>Categorias</span>
-            <span class="stat-icon purple">▤</span>
-        </div>
-        <strong class="stat-value" id="total-categories">—</strong>
-        <span class="stat-description">Categorias cadastradas</span>
-    </article>
+                            <strong class="stat-value" id="total-products">—</strong>
 
-    <article class="stat-card">
-        <div class="stat-card-top">
-            <span>Com estoque</span>
-            <span class="stat-icon green">✓</span>
-        </div>
-        <strong class="stat-value" id="available-products">—</strong>
-        <span class="stat-description">Produtos com estoque acima de zero</span>
-    </article>
+                            <span class="stat-description">
+                                Produtos cadastrados
+                            </span>
 
-    <article class="stat-card">
-        <div class="stat-card-top">
-            <span>Sem estoque</span>
-            <span class="stat-icon red">!</span>
-        </div>
-        <strong class="stat-value" id="unavailable-products">—</strong>
-        <span class="stat-description">Produtos com estoque zerado</span>
-    </article>
+                        </article>
 
-</div>
+                        <article class="stat-card">
 
-<section class="dashboard-section">
+                            <div class="stat-card-top">
+                                <span>Categorias</span>
+                                <span class="stat-icon purple" aria-hidden="true">▤</span>
+                            </div>
 
-    <div class="section-header">
-        <div>
-            <h3>Produtos cadastrados</h3>
-            <p>Últimos produtos adicionados ao catálogo.</p>
-        </div>
+                            <strong class="stat-value" id="total-categories">—</strong>
 
-        <a href="#products" class="text-link" data-page="products">
-            Ver todos →
-        </a>
-    </div>
+                            <span class="stat-description">
+                                Categorias cadastradas
+                            </span>
 
-    <div class="dashboard-table-wrapper">
+                        </article>
 
-        <table class="dashboard-table">
-            <thead>
-                <tr>
-                    <th>Produto</th>
-                    <th>Categoria</th>
-                    <th>Preço</th>
-                    <th>Estoque</th>
-                </tr>
-            </thead>
+                        <article class="stat-card">
 
-            <tbody id="recent-products">
-                <tr>
-                    <td colspan="4" class="table-message">
-                        Carregando produtos...
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                            <div class="stat-card-top">
+                                <span>Com estoque</span>
+                                <span class="stat-icon green" aria-hidden="true">✓</span>
+                            </div>
 
-    </div>
+                            <strong class="stat-value" id="available-products">—</strong>
 
-</section>
+                            <span class="stat-description">
+                                Produtos com estoque acima de zero
+                            </span>
 
-<div id="dashboard-error" class="dashboard-error" role="alert" hidden>
-    <span id="dashboard-error-message"></span>
-    <button type="button" id="dashboard-retry" class="secondary-button">
-        Tentar novamente
-    </button>
-</div>
+                        </article>
 
-                    
+                        <article class="stat-card">
+
+                            <div class="stat-card-top">
+                                <span>Sem estoque</span>
+                                <span class="stat-icon red" aria-hidden="true">!</span>
+                            </div>
+
+                            <strong class="stat-value" id="unavailable-products">—</strong>
+
+                            <span class="stat-description">
+                                Produtos com estoque zerado
+                            </span>
+
+                        </article>
+
+                    </div>
+
+                    <!-- RECENT PRODUCTS -->
+                    <section class="dashboard-section">
+
+                        <div class="section-header">
+
+                            <div>
+                                <h3>Produtos cadastrados</h3>
+                                <p>Últimos produtos adicionados ao catálogo.</p>
+                            </div>
+
+                            <a href="#products" class="text-link" data-page="products">
+                                Ver todos →
+                            </a>
+
+                        </div>
+
+                        <div class="dashboard-table-wrapper">
+
+                            <table class="dashboard-table">
+
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Produto</th>
+                                        <th scope="col">Categoria</th>
+                                        <th scope="col">Preço</th>
+                                        <th scope="col">Estoque</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="recent-products">
+
+                                    <tr>
+                                        <td colspan="4" class="table-message">
+                                            Carregando produtos...
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </section>
+
+                    <!-- DASHBOARD ERROR -->
+                    <div
+                        id="dashboard-error"
+                        class="dashboard-error"
+                        role="alert"
+                        hidden
+                    >
+                        <span id="dashboard-error-message"></span>
+
+                        <button
+                            type="button"
+                            id="dashboard-retry"
+                            class="secondary-button"
+                        >
+                            Tentar novamente
+                        </button>
+
+                    </div>
 
                 </section>
 
-<!-- PRODUCTS PAGE -->
-<section class="admin-page" id="products-page" hidden>
+                <!-- PRODUCTS PAGE -->
+                <section class="admin-page" id="products-page" hidden>
 
-    <div class="page-heading">
-        <div>
-            <h2>Produtos</h2>
-            <p>Gerencie os produtos cadastrados no catálogo.</p>
-        </div>
+                    <div class="page-heading">
 
-        <button type="button" class="primary-button" id="add-product-button">
-            + Novo produto
-        </button>
-    </div>
+                        <div>
+                            <h2>Produtos</h2>
+                            <p>Gerencie os produtos cadastrados no catálogo.</p>
+                        </div>
 
-    <div class="product-toolbar">
-
-        <div class="product-search">
-            <input
-                type="search"
-                id="product-search"
-                placeholder="Pesquisar produto pelo nome..."
-                aria-label="Pesquisar produto"
-            >
-
-            <button type="button" class="secondary-button" id="search-product-button">
-                Buscar
-            </button>
-        </div>
-
-        <div class="product-filters">
-
-            <select id="product-category-filter" aria-label="Filtrar por categoria">
-                <option value="">Todas as categorias</option>
-            </select>
-
-            <select id="product-sort" aria-label="Ordenar produtos">
-                <option value="id,desc">Mais recentes</option>
-                <option value="name,asc">Nome: A–Z</option>
-                <option value="price,asc">Menor preço</option>
-                <option value="price,desc">Maior preço</option>
-            </select>
-
-        </div>
-
-    </div>
-
-    <div class="product-table-container">
-
-        <table class="product-admin-table">
-
-            <thead>
-                <tr>
-                    <th>Produto</th>
-                    <th>Categoria</th>
-                    <th>Preço</th>
-                    <th>Estoque</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-
-            <tbody id="products-table-body">
-                <tr>
-                    <td colspan="5" class="table-message">
-                        Carregando produtos...
-                    </td>
-                </tr>
-            </tbody>
-
-        </table>
-
-    </div>
-
-    <div class="product-list-footer">
-
-        <span id="products-count">Carregando...</span>
-
-        <nav id="products-pagination" class="admin-pagination"
-            aria-label="Paginação de produtos">
-        </nav>
-
-    </div>
-
-    <div id="products-error" class="dashboard-error" role="alert" hidden>
-        <span id="products-error-message"></span>
-
-        <button type="button" class="secondary-button" id="products-retry">
-            Tentar novamente
-        </button>
-    </div>
-    
-<!-- PRODUCT MODAL -->
-<div class="modal-overlay" id="product-modal" hidden>
-
-    <div class="modal" role="dialog" aria-modal="true"
-        aria-labelledby="product-modal-title">
-
-        <div class="modal-header">
-            <div>
-                <h2 id="product-modal-title">Novo produto</h2>
-                <p id="product-modal-description">
-                    Preencha as informações do produto.
-                </p>
-            </div>
-
-            <button type="button" class="modal-close"
-                id="close-product-modal" aria-label="Fechar">
-                ×
-            </button>
-        </div>
-
-        <form id="product-form">
-
-            <div class="form-grid">
-
-                <div class="form-group form-full">
-                    <label for="product-name">Nome *</label>
-                    <input
-                        type="text"
-                        id="product-name"
-                        name="name"
-                        maxlength="150"
-                        required
-                        placeholder="Ex.: Teclado mecânico"
-                    >
-                </div>
-
-                <div class="form-group form-full">
-                    <label for="product-description">Descrição</label>
-                    <textarea
-                        id="product-description"
-                        name="description"
-                        maxlength="2000"
-                        placeholder="Descreva as características do produto..."
-                    ></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="product-price">Preço *</label>
-                    <input
-                        type="number"
-                        id="product-price"
-                        name="price"
-                        min="0.01"
-                        step="0.01"
-                        required
-                        placeholder="0,00"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="product-stock">Estoque *</label>
-                    <input
-                        type="number"
-                        id="product-stock"
-                        name="stockQuantity"
-                        min="0"
-                        step="1"
-                        required
-                        placeholder="0"
-                    >
-                </div>
-
-                <div class="form-group form-full">
-                    <label for="product-category">Categoria *</label>
-                    <select id="product-category" name="categoryId" required>
-                        <option value="">Selecione uma categoria</option>
-                    </select>
-                </div>
-
-                <div class="form-group form-full">
-                    <label for="product-image-file">Imagem do produto</label>
-
-                    <input
-                        type="file"
-                        id="product-image-file"
-                        accept="image/png,image/jpeg,image/webp"
-                    >
-
-                    <small class="form-hint">
-                        PNG, JPG ou WebP. Tamanho máximo: 5 MB.
-                    </small>
-
-                    <div class="image-preview-container" id="image-preview-container" hidden>
-                        <img id="product-image-preview" alt="Pré-visualização da imagem">
-                        <button type="button" id="remove-product-image"
-                            class="remove-image-button">
-                            Remover imagem selecionada
+                        <button
+                            type="button"
+                            class="primary-button"
+                            id="add-product-button"
+                        >
+                            + Novo produto
                         </button>
+
                     </div>
 
-                    <p id="current-image-message" class="form-hint" hidden>
-                        O produto já possui uma imagem. Selecione outra para substituí-la.
-                    </p>
-                </div>
+                    <!-- PRODUCT TOOLBAR -->
+                    <div class="product-toolbar">
 
-            </div>
+                        <div class="product-search">
 
-            <div id="product-form-error" class="form-error" role="alert" hidden></div>
+                            <input
+                                type="search"
+                                id="product-search"
+                                placeholder="Pesquisar produto pelo nome..."
+                                aria-label="Pesquisar produto"
+                            >
 
-            <div class="modal-actions">
+                            <button
+                                type="button"
+                                class="secondary-button"
+                                id="search-product-button"
+                            >
+                                Buscar
+                            </button>
 
-                <button type="button" class="secondary-button"
-                    id="cancel-product-form">
-                    Cancelar
-                </button>
+                        </div>
 
-                <button type="submit" class="primary-button"
-                    id="save-product-button">
-                    Salvar produto
-                </button>
+                        <div class="product-filters">
 
-            </div>
+                            <select
+                                id="product-category-filter"
+                                aria-label="Filtrar por categoria"
+                            >
+                                <option value="">Todas as categorias</option>
+                            </select>
 
-        </form>
+                            <select
+                                id="product-sort"
+                                aria-label="Ordenar produtos"
+                            >
+                                <option value="id,desc">Mais recentes</option>
+                                <option value="name,asc">Nome: A–Z</option>
+                                <option value="price,asc">Menor preço</option>
+                                <option value="price,desc">Maior preço</option>
+                            </select>
 
-    </div>
+                        </div>
 
-</div>
+                    </div>
 
+                    <!-- PRODUCTS TABLE -->
+                    <div class="product-table-container">
 
-</section>
+                        <table class="product-admin-table">
 
+                            <thead>
+                                <tr>
+                                    <th scope="col">Produto</th>
+                                    <th scope="col">Categoria</th>
+                                    <th scope="col">Preço</th>
+                                    <th scope="col">Estoque</th>
+                                    <th scope="col">Ações</th>
+                                </tr>
+                            </thead>
 
-<!-- CATEGORIES PAGE - IMPLEMENTAREMOS DEPOIS -->
-<section class="admin-page" id="categories-page" hidden>
+                            <tbody id="products-table-body">
 
-    <div class="page-heading">
-        <div>
-            <h2>Categorias</h2>
-            <p>Gerencie as categorias do catálogo.</p>
-        </div>
-    </div>
+                                <tr>
+                                    <td colspan="5" class="table-message">
+                                        Carregando produtos...
+                                    </td>
+                                </tr>
 
-    <div class="dashboard-placeholder">
-        <div class="placeholder-icon">▤</div>
-        <h3>Gerenciamento de categorias</h3>
-        <p>Esta área será implementada na próxima etapa.</p>
-    </div>
+                            </tbody>
 
-</section>
-                
+                        </table>
+
+                    </div>
+
+                    <!-- PRODUCTS FOOTER -->
+                    <div class="product-list-footer">
+
+                        <span id="products-count">Carregando...</span>
+
+                        <nav
+                            id="products-pagination"
+                            class="admin-pagination"
+                            aria-label="Paginação de produtos"
+                        ></nav>
+
+                    </div>
+
+                    <!-- PRODUCTS ERROR -->
+                    <div
+                        id="products-error"
+                        class="dashboard-error"
+                        role="alert"
+                        hidden
+                    >
+
+                        <span id="products-error-message"></span>
+
+                        <button
+                            type="button"
+                            class="secondary-button"
+                            id="products-retry"
+                        >
+                            Tentar novamente
+                        </button>
+
+                    </div>
+
+                </section>
+
+                <!-- CATEGORIES PAGE -->
+                <section class="admin-page" id="categories-page" hidden>
+
+                    <div class="page-heading">
+
+                        <div>
+                            <h2>Categorias</h2>
+                            <p>Gerencie as categorias do catálogo.</p>
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-placeholder">
+
+                        <div class="placeholder-icon" aria-hidden="true">▤</div>
+
+                        <h3>Gerenciamento de categorias</h3>
+
+                        <p>
+                            Esta área será implementada na próxima etapa.
+                        </p>
+
+                    </div>
+
+                </section>
+
             </main>
 
             <!-- FOOTER -->
             <footer class="admin-footer">
+
                 <span>© 2026 ProductCatalog</span>
                 <span>Painel administrativo</span>
+
             </footer>
 
         </div>
 
     </div>
 
+    <!-- PRODUCT MODAL -->
+    <div
+        class="modal-overlay"
+        id="product-modal"
+        hidden
+    >
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="product-modal-title"
+            aria-describedby="product-modal-description"
+        >
+
+            <!-- MODAL HEADER -->
+            <div class="modal-header">
+
+                <div>
+                    <h2 id="product-modal-title">Novo produto</h2>
+
+                    <p id="product-modal-description">
+                        Preencha as informações do produto.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-product-modal"
+                    aria-label="Fechar formulário"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <!-- PRODUCT FORM -->
+            <form id="product-form">
+
+                <div class="form-grid">
+
+                    <!-- NAME -->
+                    <div class="form-group form-full">
+
+                        <label for="product-name">Nome *</label>
+
+                        <input
+                            type="text"
+                            id="product-name"
+                            name="name"
+                            maxlength="150"
+                            required
+                            placeholder="Ex.: Teclado mecânico"
+                        >
+
+                    </div>
+
+                    <!-- DESCRIPTION -->
+                    <div class="form-group form-full">
+
+                        <label for="product-description">Descrição</label>
+
+                        <textarea
+                            id="product-description"
+                            name="description"
+                            maxlength="2000"
+                            placeholder="Descreva as características do produto..."
+                        ></textarea>
+
+                    </div>
+
+                    <!-- PRICE -->
+                    <div class="form-group">
+
+                        <label for="product-price">Preço *</label>
+
+                        <input
+                            type="number"
+                            id="product-price"
+                            name="price"
+                            min="0.01"
+                            step="0.01"
+                            required
+                            placeholder="0,00"
+                        >
+
+                    </div>
+
+                    <!-- STOCK -->
+                    <div class="form-group">
+
+                        <label for="product-stock">Estoque *</label>
+
+                        <input
+                            type="number"
+                            id="product-stock"
+                            name="stockQuantity"
+                            min="0"
+                            step="1"
+                            required
+                            placeholder="0"
+                        >
+
+                    </div>
+
+                    <!-- CATEGORY -->
+                    <div class="form-group form-full">
+
+                        <label for="product-category">Categoria *</label>
+
+                        <select
+                            id="product-category"
+                            name="categoryId"
+                            required
+                        >
+                            <option value="">
+                                Selecione uma categoria
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <!-- PRODUCT IMAGE -->
+                    <div class="form-group form-full">
+
+                        <label for="product-image-file">
+                            Imagem do produto
+                        </label>
+
+                        <input
+                            type="file"
+                            id="product-image-file"
+                            name="image"
+                            accept="image/png,image/jpeg,image/webp"
+                        >
+
+                        <small class="form-hint">
+                            PNG, JPG ou WebP. Tamanho máximo: 5 MB.
+                        </small>
+
+                        <div
+                            class="image-preview-container"
+                            id="image-preview-container"
+                            hidden
+                        >
+
+                            <img
+                                id="product-image-preview"
+                                alt="Pré-visualização da imagem do produto"
+                            >
+
+                            <button
+                                type="button"
+                                id="remove-product-image"
+                                class="remove-image-button"
+                            >
+                                Remover imagem selecionada
+                            </button>
+
+                        </div>
+
+                        <p
+                            id="current-image-message"
+                            class="form-hint"
+                            hidden
+                        >
+                            O produto já possui uma imagem. Selecione outra para substituí-la.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- FORM ERROR -->
+                <div
+                    id="product-form-error"
+                    class="form-error"
+                    role="alert"
+                    hidden
+                ></div>
+
+                <!-- MODAL ACTIONS -->
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="cancel-product-form"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                        id="save-product-button"
+                    >
+                        Salvar produto
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- APPLICATION -->
     <script type="module" src="./js/app.js"></script>
 
 </body>
