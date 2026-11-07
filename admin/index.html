@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Painel administrativo do ProductCatalog.">
+
+    <meta name="theme-color" content="#0f172a">
+
+    <title>Administração | ProductCatalog</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-header">
+
+                <a href="../index.html" class="admin-logo">
+                    <span class="logo-icon">P</span>
+                    <span>ProductCatalog</span>
+                </a>
+
+                <span class="admin-label">ADMINISTRAÇÃO</span>
+
+            </div>
+
+            <nav class="sidebar-navigation">
+
+                <span class="nav-section-title">GERENCIAMENTO</span>
+
+                <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                    <span class="nav-icon">▦</span>
+                    Dashboard
+                </a>
+
+                <a href="#products" class="nav-link" data-page="products">
+                    <span class="nav-icon">□</span>
+                    Produtos
+                </a>
+
+                <a href="#categories" class="nav-link" data-page="categories">
+                    <span class="nav-icon">▤</span>
+                    Categorias
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <a href="../store/index.html" target="_blank" class="sidebar-store-link">
+                    <span class="nav-icon">↗</span>
+                    Visualizar catálogo
+                </a>
+
+                <a href="../index.html" class="sidebar-store-link">
+                    <span class="nav-icon">←</span>
+                    Voltar ao início
+                </a>
+
+                <div class="sidebar-version">
+                    ProductCatalog v1.0
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-container">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        type="button"
+                        class="menu-toggle"
+                        id="menu-toggle"
+                        aria-label="Abrir menu">
+                        ☰
+                    </button>
+
+                    <div>
+                        <span class="topbar-label">PAINEL ADMINISTRATIVO</span>
+                        <h1 id="page-title">Dashboard</h1>
+                    </div>
+
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="admin-user">
+                        <div class="user-avatar">A</div>
+
+                        <div class="user-information">
+                            <strong>Administrador</strong>
+                            <span>Gestão do catálogo</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <main class="page-content" id="page-content">
+
+                <section class="dashboard-page" id="dashboard-page">
+
+                    <div class="page-heading">
+
+                        <div>
+                            <h2>Visão geral</h2>
+                            <p>Resumo das informações do seu catálogo.</p>
+                        </div>
+
+                    </div>
+
+                    <!-- DASHBOARD CONTENT WILL BE IMPLEMENTED NEXT -->
+
+                    <div class="dashboard-placeholder">
+                        <div class="placeholder-icon">▦</div>
+
+                        <h3>Bem-vindo ao ProductCatalog</h3>
+
+                        <p>
+                            Aqui você poderá acompanhar os produtos,
+                            categorias e informações gerais do catálogo.
+                        </p>
+                    </div>
+
+                </section>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="admin-footer">
+                <span>© 2026 ProductCatalog</span>
+                <span>Painel administrativo</span>
+            </footer>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="./js/app.js"></script>
+
+</body>
+
+</html>
