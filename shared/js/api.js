@@ -1,5 +1,15 @@
 
+
 import { API_BASE_URL } from "./config.js";
+
+export class ApiError extends Error {
+    constructor(message, status) {
+        super(message);
+
+        this.name = "ApiError";
+        this.status = status;
+    }
+}
 
 async function request(endpoint, options = {}) {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
@@ -9,12 +19,14 @@ async function request(endpoint, options = {}) {
 
         try {
             const data = await response.json();
+
             message = data.message || message;
+
         } catch {
-            // Mantém a mensagem HTTP caso a resposta não seja JSON.
+            // Mantém a mensagem HTTP padrão.
         }
 
-        throw new Error(message);
+        throw new ApiError(message, response.status);
     }
 
     if (response.status === 204) {
