@@ -104,9 +104,37 @@ button {
 }
 
 .catalog-message {
-    padding: 25px 0;
-    color: var(--muted);
+    width: 100%;
+    padding: 60px 20px;
     text-align: center;
+    border-radius: 12px;
+    background-color: #f8fafc;
+    margin: 20px 0;
+}
+
+.catalog-message[hidden] {
+    display: none;
+}
+
+.message-icon {
+    font-size: 42px;
+    margin-bottom: 16px;
+}
+
+.catalog-message h3 {
+    font-size: 21px;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.catalog-message p {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.catalog-message button[hidden] {
+    display: none;
 }
 
 .catalog-message.error {
