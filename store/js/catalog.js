@@ -4,6 +4,10 @@ import { API_SERVER_URL, DEFAULT_PAGE_SIZE } from "../../shared/js/config.js";
 
 const productGrid = document.getElementById("product-grid");
 const catalogMessage = document.getElementById("catalog-message");
+const messageIcon = document.getElementById("message-icon");
+const messageTitle = document.getElementById("message-title");
+const messageDescription = document.getElementById("message-description");
+const retryButton = document.getElementById("retry-button");
 const productCount = document.getElementById("product-count");
 const pagination = document.getElementById("pagination");
 
@@ -158,43 +162,35 @@ function renderPagination() {
 async function loadProducts(page = 0) {
     currentPage = page;
 
-    productGrid.innerHTML = "";
+    showLoading();
+
     pagination.innerHTML = "";
 
-    catalogMessage.hidden = false;
-    catalogMessage.classList.remove("error");
-    catalogMessage.textContent = "Carregando produtos...";
-
     try {
-        const filters = {
+        const result = await productService.filterProducts({
             name: searchInput.value.trim(),
-            categoryId: categoryFilter.value,
+            categoryId: categorySelect.value,
             page: currentPage,
-            size: DEFAULT_PAGE_SIZE,
+            size: 12,
             sort: "id,desc"
-        };
-
-        const result = await productService.filterProducts(filters);
+        });
 
         const products = result.content || [];
 
         totalPages = result.totalPages || 0;
+        totalElements = result.totalElements || 0;
 
-        productCount.textContent =
-            `${result.totalElements ?? products.length} produto(s)`;
+        productCount.textContent = `${totalElements} produtos encontrados`;
 
         if (products.length === 0) {
-            catalogMessage.textContent =
-                "Nenhum produto encontrado com esses filtros.";
-
-            pagination.innerHTML = "";
+            showEmptyCatalog();
             return;
         }
 
-        catalogMessage.hidden = true;
+        hideCatalogMessage();
 
         productGrid.innerHTML = products
-            .map(renderProduct)
+            .map(product => renderProduct(product))
             .join("");
 
         renderPagination();
@@ -202,12 +198,9 @@ async function loadProducts(page = 0) {
     } catch (error) {
         console.error("Erro ao carregar produtos:", error);
 
-        catalogMessage.hidden = false;
-        catalogMessage.classList.add("error");
-        catalogMessage.textContent =
-            `Não foi possível carregar os produtos: ${error.message}`;
+        productCount.textContent = "Não foi possível carregar os produtos.";
 
-        productCount.textContent = "";
+        showError();
     }
 }
 
@@ -238,6 +231,46 @@ function searchProducts() {
     loadProducts(0);
 }
 
+function showCatalogMessage(icon, title, description, showRetry = false) {
+    catalogMessage.hidden = false;
+
+    messageIcon.textContent = icon;
+    messageTitle.textContent = title;
+    messageDescription.textContent = description;
+
+    retryButton.hidden = !showRetry;
+    productGrid.innerHTML = "";
+}
+
+function hideCatalogMessage() {
+    catalogMessage.hidden = true;
+}
+
+function showLoading() {
+    showCatalogMessage(
+        "⏳",
+        "Carregando produtos...",
+        "Estamos buscando os produtos disponíveis."
+    );
+}
+
+function showEmptyCatalog() {
+    showCatalogMessage(
+        "📦",
+        "Nenhum produto encontrado",
+        "Ainda não existem produtos disponíveis no catálogo."
+    );
+}
+
+function showError() {
+    showCatalogMessage(
+        "⚠️",
+        "Não foi possível carregar os produtos",
+        "Verifique sua conexão e tente novamente.",
+        true
+    );
+}
+
 searchButton.addEventListener("click", searchProducts);
 
 searchInput.addEventListener("keydown", event => {
@@ -258,4 +291,7 @@ clearButton.addEventListener("click", () => {
 export async function initializeCatalog() {
     await loadCategories();
     await loadProducts();
+    retryButton.addEventListener("click", () => {
+        loadProducts(currentPage);
+    });
 }
