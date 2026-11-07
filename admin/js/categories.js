@@ -24,8 +24,15 @@ const elements = {
 const state = {
     editingId: null,
     isSaving: false,
-    requestId: 0
+    isDeleting: false,
+    requestId: 0,
+    categories: [],
+    previousFocus: null
 };
+
+// =================================
+// UTILITIES
+// =================================
 
 function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, character => {
@@ -61,6 +68,10 @@ function hideFormError() {
     elements.formError.hidden = true;
 }
 
+// =================================
+// TABLE STATES
+// =================================
+
 function showLoading() {
     elements.tableBody.innerHTML = `
         <tr>
@@ -85,6 +96,10 @@ function renderEmpty() {
     elements.count.textContent = "0 categorias cadastradas";
 }
 
+// =================================
+// TABLE RENDERING
+// =================================
+
 function renderCategories(categories) {
     if (!categories.length) {
         renderEmpty();
@@ -99,21 +114,30 @@ function renderCategories(categories) {
 
             <td>
                 <div class="product-actions">
+
                     <button
                         type="button"
                         class="action-button"
                         data-action="edit"
-                        data-id="${escapeHTML(category.id)}">
+                        data-id="${escapeHTML(category.id)}"
+                        aria-label="Editar categoria ${escapeHTML(category.name)}">
+
                         Editar
+
                     </button>
 
                     <button
                         type="button"
                         class="action-button delete-action"
                         data-action="delete"
-                        data-id="${escapeHTML(category.id)}">
+                        data-id="${escapeHTML(category.id)}"
+                        aria-label="Excluir categoria ${escapeHTML(category.name)}"
+                        ${state.isDeleting ? "disabled" : ""}>
+
                         Excluir
+
                     </button>
+
                 </div>
             </td>
         </tr>
@@ -122,6 +146,10 @@ function renderCategories(categories) {
     elements.count.textContent =
         `${categories.length} categoria(s) cadastrada(s)`;
 }
+
+// =================================
+// CATEGORY REQUEST
+// =================================
 
 async function loadCategories() {
     const currentRequestId = ++state.requestId;
@@ -136,11 +164,11 @@ async function loadCategories() {
             return;
         }
 
-        const categories = Array.isArray(response)
+        state.categories = Array.isArray(response)
             ? response
             : response.content || [];
 
-        renderCategories(categories);
+        renderCategories(state.categories);
 
     } catch (error) {
         if (currentRequestId !== state.requestId) {
@@ -160,18 +188,24 @@ async function loadCategories() {
         elements.count.textContent = "Erro ao carregar";
 
         showError(
-            "Verifique se o backend está funcionando e tente novamente."
+            `Não foi possível carregar as categorias: ${error.message}`
         );
     }
 }
 
+// =================================
+// FORM
+// =================================
+
 function resetForm() {
     elements.form.reset();
+
     hideFormError();
 
     state.editingId = null;
 
     elements.modalTitle.textContent = "Nova categoria";
+
     elements.modalDescription.textContent =
         "Informe o nome da categoria.";
 
@@ -179,8 +213,11 @@ function resetForm() {
 }
 
 function openModal() {
+    state.previousFocus = document.activeElement;
+
     elements.modal.hidden = false;
     document.body.style.overflow = "hidden";
+
     elements.name.focus();
 }
 
@@ -193,66 +230,54 @@ function closeModal(force = false) {
     document.body.style.overflow = "";
 
     resetForm();
+
+    if (state.previousFocus instanceof HTMLElement) {
+        state.previousFocus.focus();
+    }
+
+    state.previousFocus = null;
 }
 
 function openCreateModal() {
+    if (state.isSaving) {
+        return;
+    }
+
     resetForm();
     openModal();
 }
 
-async function openEditModal(id) {
-    try {
-        const categories = await categoryService.getCategories();
-
-        const list = Array.isArray(categories)
-            ? categories
-            : categories.content || [];
-
-        const category = list.find(item => String(item.id) === String(id));
-
-        if (!category) {
-            throw new Error("Categoria não encontrada.");
-        }
-
-        resetForm();
-
-        state.editingId = category.id;
-
-        elements.modalTitle.textContent = "Editar categoria";
-        elements.modalDescription.textContent =
-            "Altere o nome da categoria.";
-
-        elements.name.value = category.name;
-
-        openModal();
-
-    } catch (error) {
-        console.error("Erro ao carregar categoria:", error);
-        showError(`Não foi possível abrir a categoria: ${error.message}`);
-    }
-}
-
-async function deleteCategory(id) {
-    const confirmed = window.confirm(
-        "Tem certeza de que deseja excluir esta categoria?"
-    );
-
-    if (!confirmed) {
+function openEditModal(id) {
+    if (state.isSaving) {
         return;
     }
 
-    try {
-        await categoryService.deleteCategory(id);
-        await loadCategories();
+    const category = state.categories.find(
+        item => String(item.id) === String(id)
+    );
 
-    } catch (error) {
-        console.error("Erro ao excluir categoria:", error);
-
-        showError(
-            `Não foi possível excluir a categoria: ${error.message}`
-        );
+    if (!category) {
+        showError("Não foi possível encontrar a categoria selecionada.");
+        return;
     }
+
+    resetForm();
+
+    state.editingId = category.id;
+
+    elements.modalTitle.textContent = "Editar categoria";
+
+    elements.modalDescription.textContent =
+        "Altere o nome da categoria.";
+
+    elements.name.value = category.name;
+
+    openModal();
 }
+
+// =================================
+// SAVE
+// =================================
 
 function setSaving(saving) {
     state.isSaving = saving;
@@ -297,8 +322,13 @@ async function handleSubmit(event) {
             await categoryService.createCategory(category);
         }
 
-        closeModal(true);
+        // Atualiza a lista antes de fechar o modal.
         await loadCategories();
+
+        // Se a atualização falhar, a categoria ainda foi salva.
+        closeModal(true);
+
+        // A atualização de filtros externos será integrada depois.
 
     } catch (error) {
         console.error("Erro ao salvar categoria:", error);
@@ -311,10 +341,57 @@ async function handleSubmit(event) {
     }
 }
 
+// =================================
+// DELETE
+// =================================
+
+async function deleteCategory(id) {
+    if (state.isDeleting) {
+        return;
+    }
+
+    const category = state.categories.find(
+        item => String(item.id) === String(id)
+    );
+
+    const categoryName = category?.name ?? "esta categoria";
+
+    const confirmed = window.confirm(
+        `Tem certeza de que deseja excluir "${categoryName}"?`
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    state.isDeleting = true;
+
+    try {
+        await categoryService.deleteCategory(id);
+
+        await loadCategories();
+
+    } catch (error) {
+        console.error("Erro ao excluir categoria:", error);
+
+        showError(
+            `Não foi possível excluir a categoria: ${error.message}`
+        );
+    } finally {
+        state.isDeleting = false;
+        renderCategories(state.categories);
+    }
+}
+
+// =================================
+// EVENTS
+// =================================
+
 function initializeEvents() {
     elements.addButton.addEventListener("click", openCreateModal);
 
     elements.closeButton.addEventListener("click", () => closeModal());
+
     elements.cancelButton.addEventListener("click", () => closeModal());
 
     elements.form.addEventListener("submit", handleSubmit);
@@ -330,11 +407,15 @@ function initializeEvents() {
     elements.tableBody.addEventListener("click", event => {
         const button = event.target.closest("[data-action]");
 
-        if (!button) {
+        if (!button || button.disabled) {
             return;
         }
 
         const { action, id } = button.dataset;
+
+        if (!id) {
+            return;
+        }
 
         if (action === "edit") {
             openEditModal(id);
@@ -346,14 +427,19 @@ function initializeEvents() {
     });
 
     document.addEventListener("keydown", event => {
-        if (
-            event.key === "Escape" &&
-            !elements.modal.hidden
-        ) {
+        if (elements.modal.hidden) {
+            return;
+        }
+
+        if (event.key === "Escape") {
             closeModal();
         }
     });
 }
+
+// =================================
+// INITIALIZATION
+// =================================
 
 export function initializeCategories() {
     initializeEvents();
