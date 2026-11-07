@@ -16,13 +16,11 @@ function buildQuery(params = {}) {
 export const productService = {
 
     async getProducts(params = {}) {
-        const query = buildQuery(params);
-        return api.get(`/products?${query}`);
+        return api.get(`/products?${buildQuery(params)}`);
     },
 
     async filterProducts(params = {}) {
-        const query = buildQuery(params);
-        return api.get(`/products/filter?${query}`);
+        return api.get(`/products/filter?${buildQuery(params)}`);
     },
 
     async getProductById(id) {
@@ -39,6 +37,17 @@ export const productService = {
 
     async deleteProduct(id) {
         return api.delete(`/products/${id}`);
+    },
+
+    async uploadImage(id, file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        return api.postMultipart(`/products/${id}/image`, formData);
+    },
+
+    async deleteImage(id) {
+        return api.delete(`/products/${id}/image`);
     }
 
 };
