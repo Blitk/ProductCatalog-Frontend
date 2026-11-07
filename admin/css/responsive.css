@@ -108,3 +108,37 @@
     }
 
 }
+
+
+@media (max-width: 700px) {
+
+    .product-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .product-search {
+        min-width: 0;
+    }
+
+    .product-search input {
+        max-width: none;
+    }
+
+    .product-filters {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .product-filters select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .product-list-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
