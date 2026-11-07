@@ -1,4 +1,8 @@
 
+/* ==========================================
+   Página individual do produto
+========================================== */
+
 .product-page {
     max-width: 1200px;
     min-height: 65vh;
@@ -6,8 +10,13 @@
     padding: 45px 24px 80px;
 }
 
+/* ==========================================
+   Breadcrumb
+========================================== */
+
 .product-breadcrumb {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 35px;
     color: var(--muted);
@@ -16,7 +25,61 @@
 
 .product-breadcrumb a {
     color: var(--primary);
+    transition: opacity 0.2s ease;
 }
+
+.product-breadcrumb a:hover {
+    opacity: 0.7;
+}
+
+/* ==========================================
+   Mensagens de estado
+========================================== */
+
+#product-message {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 45px 24px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: white;
+}
+
+#product-message[hidden] {
+    display: none;
+}
+
+#product-message .message-icon {
+    margin-bottom: 15px;
+    font-size: 40px;
+}
+
+#product-message h2 {
+    margin-bottom: 10px;
+    font-size: 21px;
+    color: var(--text);
+}
+
+#product-message p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+#product-message button {
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+#product-message .back-button {
+    display: table;
+    margin: 20px auto 0;
+}
+
+/* ==========================================
+   Estrutura dos detalhes
+========================================== */
 
 .product-detail {
     display: grid;
@@ -25,7 +88,20 @@
     align-items: start;
 }
 
+.product-detail[hidden] {
+    display: none;
+}
+
+/* ==========================================
+   Galeria e imagem
+========================================== */
+
 .product-gallery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 350px;
     overflow: hidden;
     border: 1px solid var(--border);
     border-radius: 14px;
@@ -40,7 +116,33 @@
     background: white;
 }
 
+.product-detail-image[hidden] {
+    display: none;
+}
+
+.product-gallery .product-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 350px;
+    padding: 30px;
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+    background: #f8fafc;
+}
+
+.product-gallery .product-image-placeholder[hidden] {
+    display: none;
+}
+
+/* ==========================================
+   Informações do produto
+========================================== */
+
 .product-information {
+    min-width: 0;
     padding-top: 10px;
 }
 
@@ -48,30 +150,45 @@
     margin-top: 12px;
     font-size: clamp(28px, 4vw, 38px);
     line-height: 1.2;
-}
-
-.detail-price {
-    margin: 22px 0;
-    font-size: 30px;
-    font-weight: 700;
-}
-
-.detail-divider {
-    height: 1px;
-    background: var(--border);
-    margin: 25px 0;
+    overflow-wrap: anywhere;
 }
 
 .product-information h2 {
-    font-size: 15px;
     margin-bottom: 10px;
+    font-size: 15px;
 }
 
 .product-information > p {
     color: var(--muted);
     line-height: 1.8;
     white-space: pre-line;
+    overflow-wrap: anywhere;
 }
+
+/* ==========================================
+   Preço
+========================================== */
+
+.detail-price {
+    margin: 22px 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* ==========================================
+   Divisores
+========================================== */
+
+.detail-divider {
+    height: 1px;
+    margin: 25px 0;
+    background: var(--border);
+}
+
+/* ==========================================
+   Estoque
+========================================== */
 
 .detail-stock {
     display: flex;
@@ -82,6 +199,7 @@
 }
 
 .stock-indicator {
+    flex-shrink: 0;
     width: 9px;
     height: 9px;
     border-radius: 50%;
@@ -91,6 +209,10 @@
 .stock-indicator.unavailable {
     background: var(--danger);
 }
+
+/* ==========================================
+   Metadados
+========================================== */
 
 .product-metadata {
     display: flex;
@@ -103,6 +225,14 @@
     color: var(--muted);
 }
 
+.product-metadata strong {
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   Botão voltar
+========================================== */
+
 .back-button {
     display: inline-block;
     margin-top: 30px;
@@ -111,11 +241,36 @@
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
 .back-button:hover {
     background: #eff6ff;
     border-color: #bfdbfe;
+}
+
+/* ==========================================
+   Acessibilidade
+========================================== */
+
+.product-information a:focus-visible,
+.product-breadcrumb a:focus-visible,
+#product-message button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 4px;
+}
+
+/* ==========================================
+   Responsividade
+========================================== */
+
+@media (max-width: 900px) {
+    .product-detail {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
 }
 
 @media (max-width: 750px) {
@@ -128,7 +283,34 @@
         padding: 30px 16px 55px;
     }
 
+    .product-information {
+        padding-top: 0;
+    }
+
     .product-information h1 {
         font-size: 28px;
+    }
+
+    .product-gallery {
+        min-height: 280px;
+    }
+
+    .product-gallery .product-image-placeholder {
+        min-height: 280px;
+    }
+
+    .detail-price {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 400px) {
+    .product-page {
+        padding-right: 14px;
+        padding-left: 14px;
+    }
+
+    #product-message {
+        padding: 35px 16px;
     }
 }
