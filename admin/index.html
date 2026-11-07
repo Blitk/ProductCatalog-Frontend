@@ -310,6 +310,136 @@
             Tentar novamente
         </button>
     </div>
+    
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal" hidden>
+
+    <div class="modal" role="dialog" aria-modal="true"
+        aria-labelledby="product-modal-title">
+
+        <div class="modal-header">
+            <div>
+                <h2 id="product-modal-title">Novo produto</h2>
+                <p id="product-modal-description">
+                    Preencha as informações do produto.
+                </p>
+            </div>
+
+            <button type="button" class="modal-close"
+                id="close-product-modal" aria-label="Fechar">
+                ×
+            </button>
+        </div>
+
+        <form id="product-form">
+
+            <div class="form-grid">
+
+                <div class="form-group form-full">
+                    <label for="product-name">Nome *</label>
+                    <input
+                        type="text"
+                        id="product-name"
+                        name="name"
+                        maxlength="150"
+                        required
+                        placeholder="Ex.: Teclado mecânico"
+                    >
+                </div>
+
+                <div class="form-group form-full">
+                    <label for="product-description">Descrição</label>
+                    <textarea
+                        id="product-description"
+                        name="description"
+                        maxlength="2000"
+                        placeholder="Descreva as características do produto..."
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-price">Preço *</label>
+                    <input
+                        type="number"
+                        id="product-price"
+                        name="price"
+                        min="0.01"
+                        step="0.01"
+                        required
+                        placeholder="0,00"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="product-stock">Estoque *</label>
+                    <input
+                        type="number"
+                        id="product-stock"
+                        name="stockQuantity"
+                        min="0"
+                        step="1"
+                        required
+                        placeholder="0"
+                    >
+                </div>
+
+                <div class="form-group form-full">
+                    <label for="product-category">Categoria *</label>
+                    <select id="product-category" name="categoryId" required>
+                        <option value="">Selecione uma categoria</option>
+                    </select>
+                </div>
+
+                <div class="form-group form-full">
+                    <label for="product-image-file">Imagem do produto</label>
+
+                    <input
+                        type="file"
+                        id="product-image-file"
+                        accept="image/png,image/jpeg,image/webp"
+                    >
+
+                    <small class="form-hint">
+                        PNG, JPG ou WebP. Tamanho máximo: 5 MB.
+                    </small>
+
+                    <div class="image-preview-container" id="image-preview-container" hidden>
+                        <img id="product-image-preview" alt="Pré-visualização da imagem">
+                        <button type="button" id="remove-product-image"
+                            class="remove-image-button">
+                            Remover imagem selecionada
+                        </button>
+                    </div>
+
+                    <p id="current-image-message" class="form-hint" hidden>
+                        O produto já possui uma imagem. Selecione outra para substituí-la.
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="product-form-error" class="form-error" role="alert" hidden></div>
+
+            <div class="modal-actions">
+
+                <button type="button" class="secondary-button"
+                    id="cancel-product-form">
+                    Cancelar
+                </button>
+
+                <button type="submit" class="primary-button"
+                    id="save-product-button">
+                    Salvar produto
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
 
 </section>
 
