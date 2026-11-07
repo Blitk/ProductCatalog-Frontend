@@ -6,7 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="description" content="Confira os detalhes deste produto no catálogo ProductCatalog.">
+    <meta
+        name="description"
+        content="Confira os detalhes, descrição, preço e disponibilidade dos produtos no catálogo ProductCatalog."
+    >
+
+    <meta name="robots" content="index, follow">
 
     <title>Produto | ProductCatalog</title>
 
@@ -42,34 +47,89 @@
 
     <main class="product-page">
 
-        <div class="product-breadcrumb">
+        <nav class="product-breadcrumb" aria-label="Navegação estrutural">
             <a href="./index.html">Catálogo</a>
-            <span>/</span>
-            <span id="breadcrumb-product">Produto</span>
+            <span aria-hidden="true">/</span>
+            <span id="breadcrumb-product" aria-current="page">
+                Produto
+            </span>
+        </nav>
+
+        <!-- Mensagens de estado -->
+
+        <div
+            id="product-message"
+            class="catalog-message"
+            role="status"
+            aria-live="polite"
+        >
+            <div class="message-icon" id="message-icon">⏳</div>
+
+            <h2 id="message-title">Carregando produto...</h2>
+
+            <p id="message-description">
+                Estamos buscando as informações do produto.
+            </p>
+
+            <button
+                type="button"
+                id="retry-button"
+                class="primary-button"
+                hidden
+            >
+                Tentar novamente
+            </button>
+
+            <a
+                href="./index.html#catalog"
+                class="back-button"
+            >
+                Voltar ao catálogo
+            </a>
         </div>
 
-        <div id="product-message" class="catalog-message">
-            Carregando produto...
-        </div>
+        <!-- Detalhes do produto -->
 
-        <section id="product-details" class="product-detail" hidden>
+        <section
+            id="product-details"
+            class="product-detail"
+            aria-labelledby="product-name"
+            hidden
+        >
 
             <div class="product-gallery">
+
                 <img
                     id="product-image"
                     src=""
                     alt=""
                     class="product-detail-image"
+                    hidden
                 >
+
+                <div
+                    id="image-placeholder"
+                    class="product-image-placeholder"
+                    hidden
+                >
+                    Imagem não disponível
+                </div>
+
             </div>
 
             <div class="product-information">
 
-                <span id="product-category" class="product-category"></span>
+                <span
+                    id="product-category"
+                    class="product-category"
+                ></span>
 
                 <h1 id="product-name"></h1>
 
-                <div class="detail-price" id="product-price"></div>
+                <div
+                    class="detail-price"
+                    id="product-price"
+                ></div>
 
                 <div class="detail-divider"></div>
 
@@ -78,7 +138,11 @@
                 <p id="product-description"></p>
 
                 <div class="detail-stock">
-                    <span class="stock-indicator" id="stock-indicator"></span>
+                    <span
+                        class="stock-indicator"
+                        id="stock-indicator"
+                    ></span>
+
                     <span id="product-stock"></span>
                 </div>
 
@@ -89,7 +153,10 @@
                     <strong id="product-id"></strong>
                 </div>
 
-                <a href="./index.html#catalog" class="back-button">
+                <a
+                    href="./index.html#catalog"
+                    class="back-button"
+                >
                     ← Voltar ao catálogo
                 </a>
 
