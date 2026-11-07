@@ -131,16 +131,92 @@
 
                     <!-- DASHBOARD CONTENT WILL BE IMPLEMENTED NEXT -->
 
-                    <div class="dashboard-placeholder">
-                        <div class="placeholder-icon">▦</div>
+                    
+<div class="dashboard-stats" id="dashboard-stats">
 
-                        <h3>Bem-vindo ao ProductCatalog</h3>
+    <article class="stat-card">
+        <div class="stat-card-top">
+            <span>Total de produtos</span>
+            <span class="stat-icon blue">▦</span>
+        </div>
+        <strong class="stat-value" id="total-products">—</strong>
+        <span class="stat-description">Produtos cadastrados</span>
+    </article>
 
-                        <p>
-                            Aqui você poderá acompanhar os produtos,
-                            categorias e informações gerais do catálogo.
-                        </p>
-                    </div>
+    <article class="stat-card">
+        <div class="stat-card-top">
+            <span>Categorias</span>
+            <span class="stat-icon purple">▤</span>
+        </div>
+        <strong class="stat-value" id="total-categories">—</strong>
+        <span class="stat-description">Categorias cadastradas</span>
+    </article>
+
+    <article class="stat-card">
+        <div class="stat-card-top">
+            <span>Com estoque</span>
+            <span class="stat-icon green">✓</span>
+        </div>
+        <strong class="stat-value" id="available-products">—</strong>
+        <span class="stat-description">Produtos com estoque acima de zero</span>
+    </article>
+
+    <article class="stat-card">
+        <div class="stat-card-top">
+            <span>Sem estoque</span>
+            <span class="stat-icon red">!</span>
+        </div>
+        <strong class="stat-value" id="unavailable-products">—</strong>
+        <span class="stat-description">Produtos com estoque zerado</span>
+    </article>
+
+</div>
+
+<section class="dashboard-section">
+
+    <div class="section-header">
+        <div>
+            <h3>Produtos cadastrados</h3>
+            <p>Últimos produtos adicionados ao catálogo.</p>
+        </div>
+
+        <a href="#products" class="text-link" data-page="products">
+            Ver todos →
+        </a>
+    </div>
+
+    <div class="dashboard-table-wrapper">
+
+        <table class="dashboard-table">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Estoque</th>
+                </tr>
+            </thead>
+
+            <tbody id="recent-products">
+                <tr>
+                    <td colspan="4" class="table-message">
+                        Carregando produtos...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</section>
+
+<div id="dashboard-error" class="dashboard-error" role="alert" hidden>
+    <span id="dashboard-error-message"></span>
+    <button type="button" id="dashboard-retry" class="secondary-button">
+        Tentar novamente
+    </button>
+</div>
+
 
                 </section>
 
