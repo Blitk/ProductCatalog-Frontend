@@ -68,6 +68,7 @@ function getImageUrl(imageUrl) {
     }
 
     return `${API_SERVER_URL}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
+    elements.currentImageMessage.hidden = false;
 }
 
 function showError(message) {
@@ -96,6 +97,7 @@ function resetImage() {
     elements.preview.src = "";
     elements.previewContainer.hidden = true;
     elements.currentImageMessage.textContent = "";
+    elements.currentImageMessage.hidden = true;
 
     state.currentImageUrl = null;
     state.removeCurrentImage = false;
