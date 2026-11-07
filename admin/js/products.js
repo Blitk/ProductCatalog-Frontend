@@ -5,6 +5,7 @@ import { initializeProductModal } from "./components/productModal.js";
 import { API_SERVER_URL } from "../../shared/js/config.js";
 
 const PAGE_SIZE = 10;
+const DEFAULT_IMAGE = "../assets/images/no-image.png";
 
 const elements = {
     tableBody: document.getElementById("products-table-body"),
@@ -24,10 +25,15 @@ const state = {
     page: 0,
     totalPages: 0,
     totalElements: 0,
-    requestId: 0
+    requestId: 0,
+    isDeleting: false
 };
 
 let productModal;
+
+// =================================
+// UTILITIES
+// =================================
 
 function escapeHTML(value) {
     return String(value ?? "").replace(/[&<>"']/g, character => {
@@ -44,15 +50,21 @@ function escapeHTML(value) {
 }
 
 function formatPrice(value) {
+    const price = Number(value);
+
+    if (!Number.isFinite(price)) {
+        return "Preço indisponível";
+    }
+
     return new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL"
-    }).format(Number(value));
+    }).format(price);
 }
 
 function getImageUrl(imageUrl) {
     if (!imageUrl) {
-        return "../assets/images/no-image.png";
+        return DEFAULT_IMAGE;
     }
 
     if (/^https?:\/\//i.test(imageUrl)) {
@@ -63,14 +75,18 @@ function getImageUrl(imageUrl) {
 }
 
 function showError(message) {
-    elements.error.hidden = false;
     elements.errorMessage.textContent = message;
+    elements.error.hidden = false;
 }
 
 function hideError() {
-    elements.error.hidden = true;
     elements.errorMessage.textContent = "";
+    elements.error.hidden = true;
 }
+
+// =================================
+// TABLE STATES
+// =================================
 
 function showLoading() {
     elements.tableBody.innerHTML = `
@@ -98,6 +114,10 @@ function renderEmpty() {
     elements.pagination.innerHTML = "";
 }
 
+// =================================
+// PRODUCT TABLE
+// =================================
+
 function renderProducts(products) {
     if (!products.length) {
         renderEmpty();
@@ -112,13 +132,16 @@ function renderProducts(products) {
             <tr>
                 <td>
                     <div class="admin-product-info">
+
                         <img
                             src="${escapeHTML(getImageUrl(product.imageUrl))}"
                             alt=""
                             class="admin-product-image"
+                            loading="lazy"
                         >
 
                         <span>${escapeHTML(product.name)}</span>
+
                     </div>
                 </td>
 
@@ -136,6 +159,7 @@ function renderProducts(products) {
 
                 <td>
                     <div class="product-actions">
+
                         <button
                             type="button"
                             class="action-button"
@@ -143,7 +167,9 @@ function renderProducts(products) {
                             data-id="${escapeHTML(product.id)}"
                             aria-label="Editar ${escapeHTML(product.name)}"
                             title="Editar produto">
+
                             Editar
+
                         </button>
 
                         <button
@@ -152,20 +178,49 @@ function renderProducts(products) {
                             data-action="delete"
                             data-id="${escapeHTML(product.id)}"
                             aria-label="Excluir ${escapeHTML(product.name)}"
-                            title="Excluir produto">
+                            title="Excluir produto"
+                            ${state.isDeleting ? "disabled" : ""}>
+
                             Excluir
+
                         </button>
+
                     </div>
                 </td>
             </tr>
         `;
     }).join("");
 
-    elements.tableBody.querySelectorAll("img").forEach(image => {
+    configureImageFallbacks();
+}
+
+function configureImageFallbacks() {
+    const images = elements.tableBody.querySelectorAll("img");
+
+    images.forEach(image => {
         image.addEventListener("error", () => {
-            image.src = "../assets/images/no-image.png";
+            if (!image.src.endsWith(DEFAULT_IMAGE)) {
+                image.src = DEFAULT_IMAGE;
+            }
         }, { once: true });
     });
+}
+
+// =================================
+// PAGINATION
+// =================================
+
+function createPaginationButton(label, ariaLabel, disabled, callback) {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.textContent = label;
+    button.disabled = disabled;
+    button.setAttribute("aria-label", ariaLabel);
+
+    button.addEventListener("click", callback);
+
+    return button;
 }
 
 function renderPagination() {
@@ -175,40 +230,46 @@ function renderPagination() {
         return;
     }
 
-    const previousButton = document.createElement("button");
-    previousButton.type = "button";
-    previousButton.textContent = "←";
-    previousButton.disabled = state.page === 0;
-    previousButton.setAttribute("aria-label", "Página anterior");
-
-    previousButton.addEventListener("click", () => {
-        if (state.page > 0) {
-            state.page--;
-            loadProducts();
-        }
-    });
-
-    elements.pagination.appendChild(previousButton);
+    const previousButton = createPaginationButton(
+        "←",
+        "Página anterior",
+        state.page === 0,
+        () => changePage(state.page - 1)
+    );
 
     const pageInfo = document.createElement("span");
-    pageInfo.textContent = `${state.page + 1} de ${state.totalPages}`;
-    elements.pagination.appendChild(pageInfo);
 
-    const nextButton = document.createElement("button");
-    nextButton.type = "button";
-    nextButton.textContent = "→";
-    nextButton.disabled = state.page >= state.totalPages - 1;
-    nextButton.setAttribute("aria-label", "Próxima página");
+    pageInfo.textContent =
+        `Página ${state.page + 1} de ${state.totalPages}`;
 
-    nextButton.addEventListener("click", () => {
-        if (state.page < state.totalPages - 1) {
-            state.page++;
-            loadProducts();
-        }
-    });
+    pageInfo.setAttribute("aria-live", "polite");
 
-    elements.pagination.appendChild(nextButton);
+    const nextButton = createPaginationButton(
+        "→",
+        "Próxima página",
+        state.page >= state.totalPages - 1,
+        () => changePage(state.page + 1)
+    );
+
+    elements.pagination.append(
+        previousButton,
+        pageInfo,
+        nextButton
+    );
 }
+
+function changePage(page) {
+    if (page < 0 || page >= state.totalPages) {
+        return;
+    }
+
+    state.page = page;
+    loadProducts();
+}
+
+// =================================
+// PRODUCTS REQUEST
+// =================================
 
 async function loadProducts() {
     const currentRequestId = ++state.requestId;
@@ -227,6 +288,7 @@ async function loadProducts() {
     try {
         const response = await productService.filterProducts(params);
 
+        // Ignora respostas de requisições antigas.
         if (currentRequestId !== state.requestId) {
             return;
         }
@@ -240,6 +302,15 @@ async function loadProducts() {
         );
 
         state.totalElements = response.totalElements ?? products.length;
+
+        // A página atual pode deixar de existir após filtros ou exclusões.
+        if (
+            state.totalPages > 0 &&
+            state.page >= state.totalPages
+        ) {
+            state.page = state.totalPages - 1;
+            return loadProducts();
+        }
 
         renderProducts(products);
 
@@ -266,10 +337,14 @@ async function loadProducts() {
         elements.count.textContent = "Erro ao carregar";
 
         showError(
-            "Verifique se o backend está funcionando e tente novamente."
+            `Não foi possível carregar os produtos: ${error.message}`
         );
     }
 }
+
+// =================================
+// CATEGORY FILTER
+// =================================
 
 async function loadCategories() {
     try {
@@ -278,6 +353,8 @@ async function loadCategories() {
         const categories = Array.isArray(response)
             ? response
             : response.content || [];
+
+        const selectedCategory = elements.categoryFilter.value;
 
         elements.categoryFilter.innerHTML = `
             <option value="">Todas as categorias</option>
@@ -292,12 +369,32 @@ async function loadCategories() {
             elements.categoryFilter.appendChild(option);
         });
 
+        const categoryExists = categories.some(
+            category => String(category.id) === selectedCategory
+        );
+
+        if (categoryExists) {
+            elements.categoryFilter.value = selectedCategory;
+        }
+
     } catch (error) {
         console.error("Erro ao carregar categorias:", error);
+
+        showError(
+            "Não foi possível carregar as categorias para filtragem."
+        );
     }
 }
 
+// =================================
+// DELETE PRODUCT
+// =================================
+
 async function deleteProduct(id) {
+    if (state.isDeleting) {
+        return;
+    }
+
     const confirmed = window.confirm(
         "Tem certeza de que deseja excluir este produto?"
     );
@@ -306,13 +403,17 @@ async function deleteProduct(id) {
         return;
     }
 
+    state.isDeleting = true;
+
     try {
         await productService.deleteProduct(id);
 
-        // Se a página atual ficar vazia, volta uma página.
+        // Atualiza o total antes de decidir se deve voltar uma página.
+        state.totalElements = Math.max(0, state.totalElements - 1);
+
         if (
             state.page > 0 &&
-            state.totalElements - 1 <= state.page * PAGE_SIZE
+            state.totalElements <= state.page * PAGE_SIZE
         ) {
             state.page--;
         }
@@ -325,31 +426,32 @@ async function deleteProduct(id) {
         showError(
             `Não foi possível excluir o produto: ${error.message}`
         );
+    } finally {
+        state.isDeleting = false;
     }
 }
 
+// =================================
+// EVENTS
+// =================================
+
+function handleSearch() {
+    state.page = 0;
+    loadProducts();
+}
+
 function initializeEvents() {
-    elements.searchButton.addEventListener("click", () => {
-        state.page = 0;
-        loadProducts();
-    });
+    elements.searchButton.addEventListener("click", handleSearch);
 
     elements.search.addEventListener("keydown", event => {
         if (event.key === "Enter") {
-            state.page = 0;
-            loadProducts();
+            handleSearch();
         }
     });
 
-    elements.categoryFilter.addEventListener("change", () => {
-        state.page = 0;
-        loadProducts();
-    });
+    elements.categoryFilter.addEventListener("change", handleSearch);
 
-    elements.sort.addEventListener("change", () => {
-        state.page = 0;
-        loadProducts();
-    });
+    elements.sort.addEventListener("change", handleSearch);
 
     elements.retryButton.addEventListener("click", loadProducts);
 
@@ -360,11 +462,15 @@ function initializeEvents() {
     elements.tableBody.addEventListener("click", event => {
         const button = event.target.closest("[data-action]");
 
-        if (!button) {
+        if (!button || button.disabled) {
             return;
         }
 
         const { action, id } = button.dataset;
+
+        if (!id) {
+            return;
+        }
 
         if (action === "edit") {
             productModal.openEdit(id);
@@ -375,6 +481,10 @@ function initializeEvents() {
         }
     });
 }
+
+// =================================
+// INITIALIZATION
+// =================================
 
 export async function initializeProducts() {
     productModal = initializeProductModal({
